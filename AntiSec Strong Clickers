@@ -1,0 +1,128 @@
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local Window1 = OrionLib:MakeWindow({Name = "Stronger Clickers!", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
+
+local autoTab = Window1:MakeTab({
+	Name = "Auto Farm",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local autoTab2 = Window1:MakeTab({
+	Name = "Auto Open",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+
+OrionLib:MakeNotification({
+	Name = "Credits",
+	Content = "Made by AntiSec",
+	Image = "rbxassetid://4483345998",
+	Time = 5
+})
+
+OrionLib:MakeNotification({
+	Name = "Credits",
+	Content = "discord.gg/K2F52c5NcA",
+	Image = "rbxassetid://4483345998",
+	Time = 5
+})
+
+autoTab:AddToggle({
+	Name = "Auto Farm",
+	Default = false,
+	Callback = function(bool)
+        _G.autoClicker = bool
+        if bool then
+            autoClick()
+	end    
+end
+})
+
+autoTab:AddToggle({
+	Name = "Auto Sell",
+	Default = false,
+	Callback = function(bool)
+        _G.autoSeller = bool
+        if bool then
+            autoSell()
+	end    
+end
+})
+
+
+autoTab:AddToggle({
+	Name = "Auto Rebirth",
+	Default = false,
+	Callback = function(bool)
+        _G.autoRebirther = bool
+        if bool then
+            autoRebirth()
+	end    
+end
+})
+
+local sellEgg
+autoTab2:AddDropdown({
+	Name = "Eggs",
+	Default = "Choose an egg...",
+	Options = {"Basic Egg", "Deadly Egg", "Earthly Egg", "Mountain Egg", "Desert Egg", "Winter Egg", "Beach Egg", "Ocean Egg"},
+	Callback = function(value)
+		sellEgg = value
+	end    
+})
+
+autoTab2:AddToggle({
+	Name = "Auto Open",
+	Default = false,
+	Callback = function(bool)
+        _G.autoEgger = bool
+        if bool then
+            autoEgg(sellEgg)
+	end    
+end
+})
+
+-- functions
+function autoClick()
+    spawn(function()
+        while _G.autoClicker == true do
+            game:GetService("ReplicatedStorage").Remotes.TrainStrength:FireServer()
+            wait()
+        end
+    end)
+end
+
+function autoRebirth()
+    spawn(function()
+        while _G.autoRebirther == true do
+            game:GetService("ReplicatedStorage").Remotes.Rebirth:FireServer()
+            wait(1)
+        end
+    end)
+end
+
+local plr = game.Players.LocalPlayer.Character.Head
+function autoSell()
+	spawn(function()
+		while _G.autoSeller == true do
+			for _,v in pairs(game:GetService("Workspace").TriggerAreas:GetDescendants()) do
+  			if v:IsA("TouchTransmitter") then
+    			firetouchinterest(plr, v.Parent, 0)
+    			task.wait()
+    			firetouchinterest(plr, v.Parent, 1)
+			end
+		end
+	end
+end)
+end
+
+function autoEgg()
+    spawn(function()
+        while _G.autoEgger == true do
+            local ohString1 = sellEgg
+            game:GetService("ReplicatedStorage").Remotes.HatchEgg:FireServer(ohString1)
+            wait()
+        end
+    end)
+end
